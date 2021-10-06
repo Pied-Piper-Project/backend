@@ -5,7 +5,7 @@ import certifi
 def main():
 
     ca = certifi.where()
-    client = MongoClient('mongodb+srv://aareva2:Lincoln1233@cluster0.gudfj.mongodb.net/ResearchU?'
+    client = MongoClient('mongodb+srv://<your username>:<your password>@cluster0.gudfj.mongodb.net/ResearchU?'
                          'retryWrites=true&w=majority', tlsCAFile=ca) # MongoClient requires TLS certificate and
                                                                     # sometimes python is unable to request the TLS
                                                                       # so specify to use certifi package
