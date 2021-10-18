@@ -1,7 +1,11 @@
 import express from 'express';
 import {MongoClient} from 'mongodb';
+import bodyParser from "body-parser";
 
 const app = express();
+
+//use body parser
+app.use(bodyParser.json());
 
 app.get('/api/research/:professor', async (req, res) => 
 {
@@ -19,6 +23,8 @@ app.get('/api/research/:professor', async (req, res) =>
         res.status(500).json({message: "Error connnecting to db", error});
     }
 });
+
+
 
 // useEffect(() => {
 //     const fetchData = async () => {

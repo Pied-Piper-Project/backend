@@ -36,6 +36,57 @@ def main():
     }
     research.insert_one(researchOpportunity)
 
+    #adding example student profile
+    Student = db.studentProfile
+    student = {
+        'name': 'Carol Tang',
+        'school': 'Emory University',
+        'id': 2311944,
+        'major': 'Computer Science',
+        'minor': 'French Studies',
+        'onCampus': True,
+        #image
+        'contact': 'carol.tang@emory.edu',
+        'experience': {
+            'languages': ['Java', 'Python'],
+            'technologies': ['git', 'GitHub', 'Jira'],
+            'topics': ['deep learning', 'text processing']
+        },
+        'year': 'senior',
+        'isGrad': False,
+        'gpa': 3.65,
+        'aboutThem': 'Have experience in pretty much nothing'
+    }
+    Student.insert_one(student)
+
+    #adding example admin profile
+    Admin = db.adminProfile
+    admin = {
+        'name': 'Emily Morran',
+        'school': 'Emory University',
+        'id': 334455,
+        'department': 'Chemistry',
+        'onCampus': True,
+        'experience': {
+            'work': ['English Interventionist-Reading and Writing Teacher', 'Undergraduate Program Coordinator'],
+        },
+        'contact': {
+            'email': 'emily.morran@emory.edu',
+            'phone': '4047276492',
+            'location': 'Atwood 380P'
+        },
+        'aboutThem': 'something about Emily Morran',
+        #image
+        'departmentProfessors': {
+            'Simon Blakey': 'http://chemistry.emory.edu/home/people/',
+            'John Heemsmtra': 'http://chemistry.emory.edu/home/people/',
+        }
+    }
+    Admin.insert_one(admin)
+
+
+
+
     # profile = db.studentProfile
     # student = {
     #     'name': 'Abraham Arevalo',
