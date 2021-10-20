@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 //refactor get and post
 const withDB = async (operations, res) => {
     try {
-        const client = await MongoClient.connect('mongodb+srv://aareva2:Lincoln1233@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
+        const client = await MongoClient.connect('mongodb+srv://<your username>:<your password>@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
         const db = client.db('ResearchU');
 
         await operations(db);
@@ -20,7 +20,6 @@ const withDB = async (operations, res) => {
         res.status(500).json({message: "Error connnecting to db", error});
     }
 }
-
 //get example with research opportunity given prof name
 app.get('/api/research/:professor', async (req, res) =>
 {
