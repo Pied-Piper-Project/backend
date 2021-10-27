@@ -3,15 +3,17 @@ import {MongoClient} from 'mongodb';
 import bodyParser from "body-parser";
 //const mongoose = require('mongoose');
 
-const app = express();
+const app = express(),
+    port = 8000;
 
 app.use(bodyParser.json());
 
 //refactor get and post
 const withDB = async (operations, res) => {
     try {
-        const client = await MongoClient.connect('mongodb+srv://<your username>:<your password>@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
-        const db = client.db('ResearchU');
+        res.header('Access-Control-Allow-Origin', "*");
+        const client = await MongoClient.connect('mongodb+srv://aareva2:Lincoln1233@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
+        const db = client.db('ResearchU');  
 
         await operations(db);
 
@@ -23,12 +25,11 @@ const withDB = async (operations, res) => {
 //get example with research opportunity given prof name
 app.get('/api/research/:professor', async (req, res) =>
 {
-
         withDB(async (db) => {
-            const schoolName = req.params.professor;
+            const professorName = req.params.professor;
 
-            const schoolInfo = await db.collection('research').findOne({professor: schoolName});
-            res.status(200).json(schoolInfo);
+            const researchInfo = await db.collection('research').findOne({professor: professorName});
+            res.status(200).json(researchInfo);
 
         }, res);
 });
@@ -36,8 +37,7 @@ app.get('/api/research/:professor', async (req, res) =>
 //get example with student given student name
 app.get('/api/student/:studentName', async (req, res) =>
 {
-
-        withDB(async(db) => {
+        withDB(async (db) => {
             const studentName = req.params.studentName;
 
             const studentInfo = await db.collection('studentProfile').findOne({name: studentName});
@@ -45,6 +45,7 @@ app.get('/api/student/:studentName', async (req, res) =>
 
         }, res);
 });
+
 //get example with admin given admin name
 app.get('/api/admin/:adminName', async (req, res) =>
 {
