@@ -93,50 +93,50 @@ export const testRoute = {
 //         res.status(200).json(updatednewField);
 //         }, res);
 // });
-// //post example to add a language skill given student name
-// // app.post('/api/studentProfile/:student/add/experience/language', async(req, res) => {
-// //         const languages = req.body;
-// //         withDB(async (db) => {
-// //             const studentName = req.params.student;
-// //             const studentInfo = await db.collection('studentProfile').findOne({name: studentName});
-// //             await db.collection('studentProfile').updateOne({name: studentName}, {
-// //                 '$set': {
-// //                     experience : {language: studentInfo.experience.language.concat(languages)},
-// //                 },
-// //             });
-// //             const updatedStudentInfo = await db.collection('studentProfile').findOne({name: studentName});
-// //             res.status(200).json(updatedStudentInfo);
-// //         }, res);
-// //
-// // });
+//post example to add a language skill given student name
+// app.post('/api/studentProfile/:student/add/experience/language', async(req, res) => {
+//         const languages = req.body;
+//         withDB(async (db) => {
+//             const studentName = req.params.student;
+//             const studentInfo = await db.collection('studentProfile').findOne({name: studentName});
+//             await db.collection('studentProfile').updateOne({name: studentName}, {
+//                 '$set': {
+//                     experience : {language: studentInfo.experience.language.concat(languages)},
+//                 },
+//             });
+//             const updatedStudentInfo = await db.collection('studentProfile').findOne({name: studentName});
+//             res.status(200).json(updatedStudentInfo);
+//         }, res);
 //
-// //get example on research opportunity
-// // app.get('/api/research/:professor', async (req, res) =>
-// // {
-// //     try {
-// //         const schoolName = req.params.professor;
-// //         console.log(schoolName)
-// //         const client = await MongoClient.connect('mongodb+srv://aareva2:Lincoln1233@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
-// //         const db = client.db('ResearchU')
-// //
-// //         // console.log(client)
-// //         const schoolInfo = await db.collection('research').findOne({professor: schoolName});
-// //         console.log(schoolInfo)
-// //         res.status(200).json(schoolInfo);
-// //
-// //         client.close()
-// //     } catch(error){
-// //         res.status(500).json({message: "Error connnecting to db", error});
-// //     }
-// // });
+// });
+
+//get example on research opportunity
+// app.get('/api/research/:professor', async (req, res) =>
+// {
+//     try {
+//         const schoolName = req.params.professor;
+//         console.log(schoolName)
+//         const client = await MongoClient.connect('mongodb+srv://aareva2:Lincoln1233@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority');
+//         const db = client.db('ResearchU')
 //
+//         // console.log(client)
+//         const schoolInfo = await db.collection('research').findOne({professor: schoolName});
+//         console.log(schoolInfo)
+//         res.status(200).json(schoolInfo);
 //
-//
-// // useEffect(() => {
-// //     const fetchData = async () => {
-// //         const result = await fetch('http://localhost:8000/api/research/Fossati');
-// //         const body = await result.json();
-// //     }
-// // })
+//         client.close()
+//     } catch(error){
+//         res.status(500).json({message: "Error connnecting to db", error});
+//     }
+// });
+
+
+
+// useEffect(() => {
+//     const fetchData = async () => {
+//         const result = await fetch('http://localhost:8000/api/research/Fossati');
+//         const body = await result.json();
+//     }
+// })
 //
 // app.listen(8000, () => console.log('Listening on port 8000'));
