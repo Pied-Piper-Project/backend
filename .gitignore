@@ -4,3 +4,6 @@ node_modules
 #Ignore MongoDB.py
 MongoDB.py
 
+#.idea/files
+.idea/
+
