@@ -1,20 +1,19 @@
 import { MongoClient } from 'mongodb';
 
-let client;
+ let client;
 
-export const initializeDbConnection = async () => {
-    client = await MongoClient.connect('mongodb+srv://username:pw@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+ export const initializeDbConnection = async () => {
+     client = await MongoClient.connect('mongodb+srv://caroltang:wshfjy19980331@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority', {
+         useNewUrlParser: true,
+         useUnifiedTopology: true,
+     });
 
+ }
 
-}
-
-export const getDbConnection = dbName => {
-    const db = client.db(dbName);
-    return db;
-}
+ export const getDbConnection = dbName => {
+     const db = client.db(dbName);
+     return db;
+ }
 
 // const withDB = async (operations, res) => {
 //     try {
