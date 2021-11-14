@@ -1,11 +1,16 @@
-//test without db
-export const testRoute = {
-    path: '/api/test',
-    method: 'get',
-    handler: (req, res) => {
+import { getDbConnection } from "../db";
 
-        res.status(200).send("It works");
-    },
+//Return all of the research posts
+export const testRoute = {
+    path: '/api/research',
+    method: 'get',
+
+    handler: async (req, res) => {
+
+        const db = getDbConnection("ResearchU");
+        const posts = await db.collection('research').find({}).toArray();
+        res.status(200).json(posts);
+    }
 };
 //get example with research opportunity given prof name
 // app.get('/api/research/:professor', async (req, res) =>
@@ -129,14 +134,3 @@ export const testRoute = {
 //         res.status(500).json({message: "Error connnecting to db", error});
 //     }
 // });
-
-
-
-// useEffect(() => {
-//     const fetchData = async () => {
-//         const result = await fetch('http://localhost:8000/api/research/Fossati');
-//         const body = await result.json();
-//     }
-// })
-//
-// app.listen(8000, () => console.log('Listening on port 8000'));
