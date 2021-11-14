@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-let client;
+ let client;
 
 export const initializeDbConnection = async () => {
     client = await MongoClient.connect('mongodb+srv://aareva2:H3fyQE7kBV30ou8L@cluster0.gudfj.mongodb.net/ResearchU?retryWrites=true&w=majority', {
@@ -8,13 +8,12 @@ export const initializeDbConnection = async () => {
         useUnifiedTopology: true,
     });
 
+ }
 
-}
-
-export const getDbConnection = dbName => {
-    const db = client.db(dbName);
-    return db;
-}
+ export const getDbConnection = dbName => {
+     const db = client.db(dbName);
+     return db;
+ }
 
 // const withDB = async (operations, res) => {
 //     try {
