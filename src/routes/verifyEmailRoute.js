@@ -11,7 +11,6 @@ export const verifyEmailRoute = {
         const result = await db.collection('studentProfile').findOne({
             verificationString,
         });
-
         if (!result) return res.status(401).json({message: 'The email verification code is incorrect'})
 
         const { _id:id, email, info } = result;
