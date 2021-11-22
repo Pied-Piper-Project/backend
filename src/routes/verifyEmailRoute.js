@@ -13,13 +13,13 @@ export const verifyEmailRoute = {
         });
         if (!result) return res.status(401).json({message: 'The email verification code is incorrect'})
 
-        const { _id:id, email, info } = result;
+        const { _id:id, email, appliedPosts, info } = result;
 
         await db.collection('studentProfile').updateOne({ _id: id}, {
             $set: { isVerified: true}
         });
 
-        jwt.sign({id, email, isVerified: true, info}, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
+        jwt.sign({id, email, isVerified: true, appliedPosts, info}, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
             if (err) return res.sendStatus(500);
             res.status(200).json({ token });
         })
