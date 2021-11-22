@@ -7,6 +7,8 @@ import { CreateSpreadsheetPosts } from "./CreateSpreadsheetPosts";
 import { SearchwBoth } from "./SearchwBoth";
 import { SearchwSchool } from "./SearchwSchool";
 import { SearchwKeyword } from "./SearchwKeyword";
+import { verifyEmailRoute} from "./verifyEmailRoute";
+import { applyForPostRoute } from "./applyForPostRoute";
 
 export const routes = [
     signInRoute,
@@ -17,5 +19,6 @@ export const routes = [
     CreateSpreadsheetPosts,
     SearchwBoth,
     SearchwSchool,
-    SearchwKeyword
+    SearchwKeyword,
+    applyForPostRoute
 ];
