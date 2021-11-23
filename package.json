@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/Pied-Piper-Project/backend#readme",
   "dependencies": {
-    "@babel/cli": "^7.16.0",
     "@sendgrid/mail": "^7.6.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
@@ -31,6 +30,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
     "@babel/core": "^7.15.8",
     "@babel/node": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
