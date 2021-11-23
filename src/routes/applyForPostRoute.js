@@ -19,11 +19,11 @@ export const applyForPostRoute = {
         console.log(postID)
 
         const resultOne = await db.collection('studentProfile').updateOne(
-            {_id: ObjectID(studentID)}, {$set: {appliedPosts: appliedPostsU}}
+            {_id: ObjectID(studentID)}, {$push: {appliedPosts: appliedPostsU}}
         );
         console.log("Got here!")
         const resultTwo = await db.collection('research').updateOne(
-            {_id: ObjectID(postID)}, {$set: {applicants: applicantsU}}
+            {_id: ObjectID(postID)}, {$push: {applicants: applicantsU}}
         );
         res.sendStatus(200);
     }
