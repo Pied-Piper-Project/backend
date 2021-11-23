@@ -13,6 +13,7 @@ import { applyForPostRoute } from "./applyForPostRoute";
 export const routes = [
     signInRoute,
     signUpRoute,
+    verifyEmailRoute,
     allResearchPosts,
     updateUserInfoRoute,
     CreatePostsRoute,
