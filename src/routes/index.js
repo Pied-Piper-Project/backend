@@ -5,8 +5,9 @@ import { updateUserInfoRoute} from "./updateUserInfoRoute";
 import { CreatePostsRoute } from "./CreatePostsRoute"; 
 import { CreateSpreadsheetPosts } from "./CreateSpreadsheetPosts";
 import { SearchwBoth } from "./SearchwBoth";
-import { SearchwSchool } from "./SearchwSchool";
+import { SearchwSchool } from "./SearchwSchool"
 import { SearchwKeyword } from "./SearchwKeyword";
+import { studentProfileRoute } from "./studentProfileRoute";
 
 export const routes = [
     signInRoute,
@@ -17,5 +18,6 @@ export const routes = [
     CreateSpreadsheetPosts,
     SearchwBoth,
     SearchwSchool,
-    SearchwKeyword
+    SearchwKeyword,
+    studentProfileRoute,
 ];
