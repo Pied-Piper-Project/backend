@@ -10,37 +10,98 @@ export const signUpRoute = {
 
     handler: async (req, res) => {
 
-        const { email, password } = req.body;
-
+        const { email, password, signup } = req.body;
+        console.log("signup is", signup)
         const db = getDbConnection("ResearchU");
-        const user = await db.collection('studentProfile').findOne({email});
 
-        if (user) {
-            res.sendStatus(409);
-        }
-
-        const passwordHash = await bcrypt.hash(password, 10);
-
+        let user;
+        let insertedID;
+        let startingINFO;
         const verificationString = uuid();
 
-        const startingInfo = {
-            school: '',
-            major: '',
-            minor: '',
-            onCampus: false,
-            year: '',
-            gpa: 0.0,
-            aboutThem: '',
-        };
-        const result = await db.collection('studentProfile').insertOne({
-            email,
-            passwordHash,
-            info: startingInfo,
-            isVerified: false,
-            verificationString,
-            appliedPosts: ['']
-        });
-        const { insertedId } = result;
+        if (signup === "Student") {
+            user = await db.collection('studentProfile').findOne({email});
+            if (!user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+
+            const startingInfo = {
+                school: '',
+                major: '',
+                minor: '',
+                onCampus: false,
+                year: '',
+                gpa: 0.0,
+                aboutThem: '',
+            };
+            const result = await db.collection('studentProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                appliedPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId
+            startingINFO = startingInfo
+        }
+        else if (signup === "Professor") {
+            console.log("PROFESSOR signupppp")
+            user = await db.collection('professorProfile').findOne({email});
+            if (!user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+
+            const startingInfo = {
+                school: '',
+                onCampus: false,
+                department: '',
+            };
+            const result = await db.collection('professorProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                createdPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId
+            startingINFO = startingInfo
+        }
+        else {
+            user = await db.collection('adminProfile').findOne({email});
+            if (!user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+            const verificationString = uuid();
+
+            const startingInfo = {
+                school: '',
+                onCampus: false,
+                department: '',
+                aboutThem: ''
+            };
+            const result = await db.collection('adminProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                createdPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId
+            startingINFO = startingInfo
+        }
+
 
         try {
             await sendEmail({
@@ -49,7 +110,7 @@ export const signUpRoute = {
                 subject: 'Please verify your email',
                 text: `
                 Thanks for signing up! To verify your email, click here:
-                http://localhost:3000/ResearchU/verify-email/${verificationString}
+                http://localhost:3000/ResearchU/verify-email/${verificationString}/${signup}
                 `,
             });
         } catch (e) {
@@ -57,10 +118,11 @@ export const signUpRoute = {
             res.sendStatus(500);
         }
 
+        
         jwt.sign({
-            id: insertedId,
+            id: insertedID,
             email,
-            info: startingInfo,
+            info: startingINFO,
             isVerified: false,
             appliedPosts: [''],
         },
@@ -72,8 +134,35 @@ export const signUpRoute = {
             if (err) {
                 return res.status(500).send(err);
             }
-            res.status(200).json({token});
+            res.status(200).json({token})
             }
         );
     }
 }
+
+        // if (user) {
+        //     res.sendStatus(409);
+        // }
+
+        // const passwordHash = await bcrypt.hash(password, 10);
+        //
+        // const verificationString = uuid();
+        //
+        // const startingInfo = {
+        //     school: '',
+        //     major: '',
+        //     minor: '',
+        //     onCampus: false,
+        //     year: '',
+        //     gpa: 0.0,
+        //     aboutThem: '',
+        // };
+        // const result = await db.collection('studentProfile').insertOne({
+        //     email,
+        //     passwordHash,
+        //     info: startingInfo,
+        //     isVerified: false,
+        //     verificationString,
+        //     appliedPosts: ['']
+        // });
+        // const { insertedId } = result;
