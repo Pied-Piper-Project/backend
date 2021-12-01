@@ -7,13 +7,10 @@ export const studentProfileRoute = {
     handler: async (req, res) => {
         const{StudentId} = req.params;
         const db = getDbConnection('ResearchU');
-        console.log(StudentId)
-        console.log(ObjectID(StudentId))
 
         var resultOne = await db.collection('studentProfile').find(
             {_id: ObjectID(StudentId)}
         ).toArray();
-        console.log(resultOne)
-        res.sendStatus(200).json(resultOne);
+        res.status(200).json(resultOne);
     }
 };
