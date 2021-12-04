@@ -37,7 +37,8 @@ export const signUpRoute = {
             passwordHash,
             info: startingInfo,
             isVerified: false,
-            verificationString
+            verificationString,
+            appliedPosts: ['']
         });
         const { insertedId } = result;
 
@@ -61,6 +62,7 @@ export const signUpRoute = {
             email,
             info: startingInfo,
             isVerified: false,
+            appliedPosts: [''],
         },
         process.env.JWT_SECRET,
             {
