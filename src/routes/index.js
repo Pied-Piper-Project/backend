@@ -8,10 +8,13 @@ import { SearchwBoth } from "./SearchwBoth";
 import { SearchwSchool } from "./SearchwSchool"
 import { SearchwKeyword } from "./SearchwKeyword";
 import { studentProfileRoute } from "./studentProfileRoute";
+import { verifyEmailRoute} from "./verifyEmailRoute";
+import { applyForPostRoute } from "./applyForPostRoute";
 
 export const routes = [
     signInRoute,
     signUpRoute,
+    verifyEmailRoute,
     allResearchPosts,
     updateUserInfoRoute,
     CreatePostsRoute,
@@ -20,4 +23,5 @@ export const routes = [
     SearchwSchool,
     SearchwKeyword,
     studentProfileRoute,
+    applyForPostRoute
 ];
