@@ -11,7 +11,7 @@ export const signUpRoute = {
     handler: async (req, res) => {
 
         const { email, password, signup } = req.body;
-        console.log("signup is", signup)
+
         const db = getDbConnection("ResearchU");
 
         let user;
@@ -19,9 +19,10 @@ export const signUpRoute = {
         let startingINFO;
         const verificationString = uuid();
 
+
         if (signup === "Student") {
             user = await db.collection('studentProfile').findOne({email});
-            if (!user) {
+            if (user) {
             res.sendStatus(409);
             }
 
@@ -42,16 +43,17 @@ export const signUpRoute = {
                 info: startingInfo,
                 isVerified: false,
                 verificationString,
+                signup,
                 appliedPosts: ['']
             });
             const { insertedId } = result;
-            insertedID = insertedId
-            startingINFO = startingInfo
+            insertedID = insertedId;
+            startingINFO = startingInfo;
         }
         else if (signup === "Professor") {
-            console.log("PROFESSOR signupppp")
+
             user = await db.collection('professorProfile').findOne({email});
-            if (!user) {
+            if (user) {
             res.sendStatus(409);
             }
 
@@ -68,20 +70,22 @@ export const signUpRoute = {
                 info: startingInfo,
                 isVerified: false,
                 verificationString,
+                signup,
                 createdPosts: ['']
             });
             const { insertedId } = result;
             insertedID = insertedId
+
             startingINFO = startingInfo
         }
         else {
+
             user = await db.collection('adminProfile').findOne({email});
-            if (!user) {
+            if (user) {
             res.sendStatus(409);
             }
 
             const passwordHash = await bcrypt.hash(password, 10);
-            const verificationString = uuid();
 
             const startingInfo = {
                 school: '',
@@ -95,13 +99,13 @@ export const signUpRoute = {
                 info: startingInfo,
                 isVerified: false,
                 verificationString,
+                signup,
                 createdPosts: ['']
             });
             const { insertedId } = result;
             insertedID = insertedId
             startingINFO = startingInfo
         }
-
 
         try {
             await sendEmail({
@@ -110,16 +114,18 @@ export const signUpRoute = {
                 subject: 'Please verify your email',
                 text: `
                 Thanks for signing up! To verify your email, click here:
-                http://localhost:3000/ResearchU/verify-email/${verificationString}/${signup}
+                http://localhost:3000/ResearchU/verify-email/${verificationString}
                 `,
             });
         } catch (e) {
+
             console.log(e);
             res.sendStatus(500);
         }
 
-        
-        jwt.sign({
+        if (signup === "Student") {
+
+            jwt.sign({
             id: insertedID,
             email,
             info: startingINFO,
@@ -132,11 +138,76 @@ export const signUpRoute = {
             },
             (err, token) => {
             if (err) {
+                console.log("ERROR?")
+                return res.status(500).send(err);
+            }
+
+            res.status(200).json({token})
+            }
+        );
+        }
+        else if (signup === "Professor") {
+
+            jwt.sign({
+            id: insertedID,
+            email,
+            info: startingINFO,
+            isVerified: false,
+            CreatedPosts: [''],
+        },
+        process.env.JWT_SECRET,
+            {
+                expiresIn: '2d',
+            },
+            (err, token) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+
+            res.status(200).json({token});
+            }
+        );
+        }
+        else {
+
+            jwt.sign({
+            id: insertedID,
+            email,
+            info: startingINFO,
+            isVerified: false,
+            CreatedPosts: [''],
+        },
+        process.env.JWT_SECRET,
+            {
+                expiresIn: '2d',
+            },
+            (err, token) => {
+            if (err) {
                 return res.status(500).send(err);
             }
             res.status(200).json({token})
             }
         );
+        }
+
+        // jwt.sign({
+        //     id: insertedID,
+        //     email,
+        //     info: startingINFO,
+        //     isVerified: false,
+        //     CreatedPosts: [''],
+        // },
+        // process.env.JWT_SECRET,
+        //     {
+        //         expiresIn: '2d',
+        //     },
+        //     (err, token) => {
+        //     if (err) {
+        //         return res.status(500).send(err);
+        //     }
+        //     res.status(200).json({token})
+        //     }
+        // );
     }
 }
 

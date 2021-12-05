@@ -6,68 +6,67 @@ export const verifyEmailRoute = {
     path: '/api/ResearchU/verify-email',
     method: 'put',
     handler: async (req, res) => {
-        const { verificationString, signup } = req.body;
+
+        const {verificationString} = req.body;
         const db = getDbConnection('ResearchU');
-        let result;
-        if (signup === 'Student') {
-            result = await db.collection('studentProfile').findOne({
+        let resultStudent;
+        let resultProf;
+        let resultAdmin;
+
+        resultStudent = await db.collection('studentProfile').findOne({
             verificationString,
             });
-        }
-        else if (signup === 'Professor') {
-            result = await db.collection('professorProfile').findOne({
+
+        resultProf = await db.collection('professorProfile').findOne({
             verificationString,
             });
-        }
-        else if (signup === 'Administrator') {
-            result = await db.collection('adminProfile').findOne({
+
+        resultAdmin = await db.collection('adminProfile').findOne({
             verificationString,
             });
-        }
-        else {
+
+
+        if (!resultStudent && !resultProf && !resultAdmin) {
             return res.status(401).json({message: 'The email verification code is incorrect'})
         }
-        if (!result) return res.status(401).json({message: 'The email verification code is incorrect'})
 
 
-        if (signup === 'Student') {
-            const { _id:id, email, appliedPosts, info } = result;
+        let payload;
+        if (resultStudent) {
+
+            const { _id:id, email, appliedPosts, info } = resultStudent;
 
             await db.collection('studentProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
             });
-
-            jwt.sign({id, email, isVerified: true, appliedPosts, info}, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
-                if (err) return res.sendStatus(500);
-                res.status(200).json({ token });
-            })
+            payload = {id, email, isVerified: true, appliedPosts, info}
         }
 
-        else if (signup === 'Professor') {
-            const { _id:id, email, createdPosts, info } = result;
+        if (resultProf) {
+
+            const { _id:id, email, createdPosts, info } = resultProf;
 
             await db.collection('professorProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
             });
-
-            jwt.sign({id, email, isVerified: true, createdPosts, info}, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
-                if (err) return res.sendStatus(500);
-                res.status(200).json({ token });
-            })
+            payload = {id, email, isVerified: true, createdPosts, info}
         }
 
-        else {
-            const { _id:id, email, createdPosts, info } = result;
+        if (resultAdmin) {
+
+            const { _id:id, email, createdPosts, info } = resultAdmin;
 
             await db.collection('adminProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
             });
 
-            jwt.sign({id, email, isVerified: true, createdPosts, info}, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
-                if (err) return res.sendStatus(500);
-                res.status(200).json({ token });
-            })
+            payload = {id, email, isVerified: true, createdPosts, info}
         }
+
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {
+            if (err) return res.sendStatus(500);
+            res.status(200).json({ token });
+        })
         // const { _id:id, email, appliedPosts, info } = result;
         //
         // await db.collection('studentProfile').updateOne({ _id: id}, {
