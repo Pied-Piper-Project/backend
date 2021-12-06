@@ -12,6 +12,7 @@ import { SearchwKeyword } from "./SearchwKeyword";
 import { studentProfileRoute } from "./studentProfileRoute";
 import { verifyEmailRoute} from "./verifyEmailRoute";
 import { applyForPostRoute } from "./applyForPostRoute";
+import {applicantManage} from "./applicantManage"
 
 export const routes = [
     signInRoute,
@@ -27,5 +28,6 @@ export const routes = [
     SearchwSchool,
     SearchwKeyword,
     studentProfileRoute,
-    applyForPostRoute
+    applyForPostRoute,
+    applicantManage
 ];
