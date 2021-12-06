@@ -10,37 +10,101 @@ export const signUpRoute = {
 
     handler: async (req, res) => {
 
-        const { email, password } = req.body;
+        const { email, password, signup } = req.body;
 
         const db = getDbConnection("ResearchU");
-        const user = await db.collection('studentProfile').findOne({email});
 
-        if (user) {
-            res.sendStatus(409);
-        }
-
-        const passwordHash = await bcrypt.hash(password, 10);
-
+        let user;
+        let insertedID;
+        let startingINFO;
         const verificationString = uuid();
 
-        const startingInfo = {
-            school: '',
-            major: '',
-            minor: '',
-            onCampus: false,
-            year: '',
-            gpa: 0.0,
-            aboutThem: '',
-        };
-        const result = await db.collection('studentProfile').insertOne({
-            email,
-            passwordHash,
-            info: startingInfo,
-            isVerified: false,
-            verificationString,
-            appliedPosts: ['']
-        });
-        const { insertedId } = result;
+
+        if (signup === "Student") {
+            user = await db.collection('studentProfile').findOne({email});
+            if (user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+
+            const startingInfo = {
+                school: '',
+                major: '',
+                minor: '',
+                onCampus: false,
+                year: '',
+                gpa: 0.0,
+                aboutThem: '',
+            };
+            const result = await db.collection('studentProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                signup,
+                appliedPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId;
+            startingINFO = startingInfo;
+        }
+        else if (signup === "Professor") {
+
+            user = await db.collection('professorProfile').findOne({email});
+            if (user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+            const startingInfo = {
+                school: '',
+                onCampus: false,
+                department: '',
+            };
+            const result = await db.collection('professorProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                signup,
+                createdPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId
+
+            startingINFO = startingInfo
+        }
+        else {
+
+            user = await db.collection('adminProfile').findOne({email});
+            if (user) {
+            res.sendStatus(409);
+            }
+
+            const passwordHash = await bcrypt.hash(password, 10);
+
+            const startingInfo = {
+                school: '',
+                onCampus: false,
+                department: '',
+                aboutThem: ''
+            };
+            const result = await db.collection('adminProfile').insertOne({
+                email,
+                passwordHash,
+                info: startingInfo,
+                isVerified: false,
+                verificationString,
+                signup,
+                createdPosts: ['']
+            });
+            const { insertedId } = result;
+            insertedID = insertedId
+            startingINFO = startingInfo
+        }
 
         try {
             await sendEmail({
@@ -53,14 +117,17 @@ export const signUpRoute = {
                 `,
             });
         } catch (e) {
+
             console.log(e);
             res.sendStatus(500);
         }
 
-        jwt.sign({
-            id: insertedId,
+        if (signup === "Student") {
+
+            jwt.sign({
+            id: insertedID,
             email,
-            info: startingInfo,
+            info: startingINFO,
             isVerified: false,
             appliedPosts: [''],
         },
@@ -70,10 +137,102 @@ export const signUpRoute = {
             },
             (err, token) => {
             if (err) {
+                console.log("ERROR?")
                 return res.status(500).send(err);
             }
+
+            res.status(200).json({token})
+            }
+        );
+        }
+        else if (signup === "Professor") {
+
+            jwt.sign({
+            id: insertedID,
+            email,
+            info: startingINFO,
+            isVerified: false,
+            CreatedPosts: [''],
+        },
+        process.env.JWT_SECRET,
+            {
+                expiresIn: '2d',
+            },
+            (err, token) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+
             res.status(200).json({token});
             }
         );
+        }
+        else {
+
+            jwt.sign({
+            id: insertedID,
+            email,
+            info: startingINFO,
+            isVerified: false,
+            CreatedPosts: [''],
+        },
+        process.env.JWT_SECRET,
+            {
+                expiresIn: '2d',
+            },
+            (err, token) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.status(200).json({token})
+            }
+        );
+        }
+
+        // jwt.sign({
+        //     id: insertedID,
+        //     email,
+        //     info: startingINFO,
+        //     isVerified: false,
+        //     CreatedPosts: [''],
+        // },
+        // process.env.JWT_SECRET,
+        //     {
+        //         expiresIn: '2d',
+        //     },
+        //     (err, token) => {
+        //     if (err) {
+        //         return res.status(500).send(err);
+        //     }
+        //     res.status(200).json({token})
+        //     }
+        // );
     }
 }
+
+        // if (user) {
+        //     res.sendStatus(409);
+        // }
+
+        // const passwordHash = await bcrypt.hash(password, 10);
+        //
+        // const verificationString = uuid();
+        //
+        // const startingInfo = {
+        //     school: '',
+        //     major: '',
+        //     minor: '',
+        //     onCampus: false,
+        //     year: '',
+        //     gpa: 0.0,
+        //     aboutThem: '',
+        // };
+        // const result = await db.collection('studentProfile').insertOne({
+        //     email,
+        //     passwordHash,
+        //     info: startingInfo,
+        //     isVerified: false,
+        //     verificationString,
+        //     appliedPosts: ['']
+        // });
+        // const { insertedId } = result;
