@@ -24,10 +24,10 @@ export const signInRoute = {
         if (!user) return res.sendStatus(401);
 
         if (signin === "Student") {
-            const { _id: id, isVerified, passwordHash, appliedPosts, info} = user;
+            const { _id: id, isVerified, passwordHash, appliedPosts, info, signup} = user;
             const isCorrect = await bcrypt.compare(password, passwordHash);
             if (isCorrect) {
-                jwt.sign({ id, isVerified, email, appliedPosts, info},
+                jwt.sign({ id, isVerified, email, appliedPosts, info, signup},
                             process.env.JWT_SECRET, {expiresIn: '2d'},
                     (err, token) => {
                                 if (err) {
@@ -41,10 +41,10 @@ export const signInRoute = {
             }
         }
         else if (signin === "Professor") {
-            const { _id: id, isVerified, passwordHash, createdPosts, info} = user;
+            const { _id: id, isVerified, passwordHash, createdPosts, info, signup} = user;
             const isCorrect = await bcrypt.compare(password, passwordHash);
             if (isCorrect) {
-                jwt.sign({ id, isVerified, email, createdPosts, info},
+                jwt.sign({ id, isVerified, email, createdPosts, info, signup},
                             process.env.JWT_SECRET, {expiresIn: '2d'},
                     (err, token) => {
                                 if (err) {
@@ -58,10 +58,10 @@ export const signInRoute = {
             }
         }
         else {
-            const { _id: id, isVerified, passwordHash, createdPosts, info} = user;
+            const { _id: id, isVerified, passwordHash, createdPosts, info, signup} = user;
             const isCorrect = await bcrypt.compare(password, passwordHash);
             if (isCorrect) {
-                jwt.sign({ id, isVerified, email, createdPosts, info},
+                jwt.sign({ id, isVerified, email, createdPosts, info, signup},
                             process.env.JWT_SECRET, {expiresIn: '2d'},
                     (err, token) => {
                                 if (err) {

@@ -39,7 +39,7 @@ export const verifyEmailRoute = {
             await db.collection('studentProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
             });
-            payload = {id, email, isVerified: true, appliedPosts, info}
+            payload = {id, email, isVerified: true, appliedPosts, info, signup}
         }
 
         if (resultProf) {
@@ -49,7 +49,7 @@ export const verifyEmailRoute = {
             await db.collection('professorProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
             });
-            payload = {id, email, isVerified: true, createdPosts, info}
+            payload = {id, email, isVerified: true, createdPosts, info, signup}
         }
 
         if (resultAdmin) {
@@ -60,7 +60,7 @@ export const verifyEmailRoute = {
                 $set: { isVerified: true}
             });
 
-            payload = {id, email, isVerified: true, createdPosts, info}
+            payload = {id, email, isVerified: true, createdPosts, info, signup}
         }
 
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2d'}, (err, token) => {

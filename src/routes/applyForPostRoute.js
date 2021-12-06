@@ -31,7 +31,7 @@ export const applyForPostRoute = {
         const user = await db.collection('studentProfile').findOne({_id: ObjectID(studentID)});
         console.log("user id is found: ", user)
         if (!user) return res.sendStatus(401);
-        const { _id: sid, email, isVerified, appliedPosts, info} = user;
+        const { _id: sid, email, isVerified, appliedPosts, info, signup} = user;
 
         jwt.sign({
             id: sid,
@@ -39,6 +39,7 @@ export const applyForPostRoute = {
             info,
             isVerified,
             appliedPosts,
+            signup,
         },
         process.env.JWT_SECRET,
             {
@@ -51,6 +52,5 @@ export const applyForPostRoute = {
             res.status(200).json({token});
             }
         );
-        res.sendStatus(200);
     }
 }
