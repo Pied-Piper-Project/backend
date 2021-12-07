@@ -34,7 +34,7 @@ export const verifyEmailRoute = {
         let payload;
         if (resultStudent) {
 
-            const { _id:id, email, appliedPosts, info } = resultStudent;
+            const { _id:id, email, appliedPosts, info, signup } = resultStudent;
 
             await db.collection('studentProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
@@ -44,7 +44,7 @@ export const verifyEmailRoute = {
 
         if (resultProf) {
 
-            const { _id:id, email, createdPosts, info } = resultProf;
+            const { _id:id, email, createdPosts, info, signup } = resultProf;
 
             await db.collection('professorProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
@@ -54,7 +54,7 @@ export const verifyEmailRoute = {
 
         if (resultAdmin) {
 
-            const { _id:id, email, createdPosts, info } = resultAdmin;
+            const { _id:id, email, createdPosts, info, signup } = resultAdmin;
 
             await db.collection('adminProfile').updateOne({ _id: id}, {
                 $set: { isVerified: true}
