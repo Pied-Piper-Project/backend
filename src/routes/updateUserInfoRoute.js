@@ -47,8 +47,8 @@ export const updateUserInfoRoute = {
                 { $set: {info: updates}},
                 { returnOriginal: false},
             );
-            const { email, info} = result.value;
-            jwt.sign({ id, email, isVerified, appliedPosts, info}, process.env.JWT_SECRET, {expiresIn: '2d'}, (err, token) => {
+            const { email, appliedPosts, info, signup} = result.value;
+            jwt.sign({ id, email, isVerified, appliedPosts, info, signup}, process.env.JWT_SECRET, {expiresIn: '2d'}, (err, token) => {
                 if (err) {
                     return res.status(200).json(err);
                 }

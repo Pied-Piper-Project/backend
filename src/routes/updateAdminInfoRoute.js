@@ -41,8 +41,8 @@ export const updateAdminInfoRoute = {
                 { $set: {info: updates}},
                 { returnOriginal: false},
             );
-            const { email, info} = result.value;
-            jwt.sign({ id, email, isVerified, info}, process.env.JWT_SECRET, {expiresIn: '2d'}, (err, token) => {
+            const { email, appliedPosts, info, signup} = result.value;
+            jwt.sign({ id, email, appliedPosts, isVerified, info, signup}, process.env.JWT_SECRET, {expiresIn: '2d'}, (err, token) => {
                 if (err) {
                     return res.status(200).json(err);
                 }
