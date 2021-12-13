@@ -16,6 +16,16 @@ export const applicantManage = {
         const result = await db.collection('research').updateOne(
             {_id: ObjectID(post_id), applicants: [studentID, "1"]}, {$set: {"applicants.$": studentArray}}
         );
+        if (number == 0){
+            const resultTwo = await db.collection('research').updateOne(
+                {_id: ObjectID(post_id), applicants: [studentID, "2"]}, {$set: {"applicants.$": studentArray}}
+            );
+        }
+        else if (number == 2) {
+            const resultZero = await db.collection('research').updateOne(
+                {_id: ObjectID(post_id), applicants: [studentID, "0"]}, {$set: {"applicants.$": studentArray}}
+            );
+        }
         res.sendStatus(200);
     }
 }
